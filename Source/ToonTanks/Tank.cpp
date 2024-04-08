@@ -7,6 +7,7 @@
 #include <GameFramework/PlayerController.h>
 #include <Camera/CameraComponent.h>
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 
 APlayerController* PlayerController;
 
@@ -37,6 +38,23 @@ void ATank::Move(float Value)
 	
 	DeltaLocation.X = Value * Speed * deltaTime;
 	AddActorLocalOffset(DeltaLocation, true);
+}
+
+// Called every frame
+void ATank::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (PlayerController)
+	{
+		FHitResult HitResult;
+		if (PlayerController->GetHitResultUnderCursor(
+			ECollisionChannel::ECC_Visibility, false, HitResult))
+		{
+			DrawDebugSphere(
+				GetWorld(), HitResult.ImpactPoint, 10, 12, FColor::Red);
+		}
+	}
 }
 
 // Called when the game starts or when spawned
