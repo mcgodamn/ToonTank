@@ -21,10 +21,20 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Comp")
 	class USpringArmComponent* SpringArmComp;
 	UPROPERTY(VisibleAnywhere, Category = "Comp")
 	class UCameraComponent* CameraComp;
+	UPROPERTY(EditAnywhere, Category = "Variable")
+	float Speed = 1;
+	UPROPERTY(EditAnywhere, Category = "Variable")
+	float TurnRate = 1;
+
 	void Move(float Value);
+	void Turn(float Value);
 };
