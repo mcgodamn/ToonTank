@@ -3,6 +3,7 @@
 
 #include "BasePawn.h"
 #include <Components/CapsuleComponent.h>
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -26,6 +27,13 @@ ABasePawn::ABasePawn()
 void ABasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
+void ABasePawn::RotateTurret(FVector LookAtTarget)
+{
+	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
+	FRotator Rotation = FRotator(0.0f, ToTarget.Rotation().Yaw, 0.0f);
+	TurretMesh->SetWorldRotation(
+		FMath::RInterpTo(
+			TurretMesh->GetComponentRotation(), Rotation, GetWorld()->DeltaTimeSeconds, 25.f));
+}

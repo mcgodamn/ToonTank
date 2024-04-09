@@ -45,15 +45,12 @@ void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (PlayerController)
-	{
-		FHitResult HitResult;
-		if (PlayerController->GetHitResultUnderCursor(
+	FHitResult HitResult;
+	if (PlayerController
+		&& PlayerController->GetHitResultUnderCursor(
 			ECollisionChannel::ECC_Visibility, false, HitResult))
-		{
-			DrawDebugSphere(
-				GetWorld(), HitResult.ImpactPoint, 10, 12, FColor::Red);
-		}
+	{
+		RotateTurret(HitResult.ImpactPoint);
 	}
 }
 
