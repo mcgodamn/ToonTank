@@ -8,6 +8,7 @@
 #include <Camera/CameraComponent.h>
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "Engine/EngineBaseTypes.h"
 
 APlayerController* PlayerController;
 
@@ -26,6 +27,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
+	PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &ATank::Fire);
 }
 
 float NowDeltaLocation;
@@ -64,11 +66,11 @@ void ATank::BeginPlay()
 
 void ATank::Turn(float Value)
 {
-	if (NowDeltaLocation == 0) return;
+	// if (NowDeltaLocation == 0) return;
 
 	auto DeltaRotation = FRotator::ZeroRotator;
 	auto deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 
-	DeltaRotation.Yaw = Value * TurnRate * deltaTime;
+	DeltaRotation.Yaw = Value * TurnRate * deltaTime * (NowDeltaLocation == -1 ? -1 : 1);
 	AddActorLocalRotation(DeltaRotation, true);
 }

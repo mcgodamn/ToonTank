@@ -11,19 +11,30 @@ void ATower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
     
-    if (Tank)
+    if (InRange())
     {
-        auto distance = FVector::Dist(Tank->GetActorLocation(), GetActorLocation());
-        if (distance < FireRange)
-        {
-            RotateTurret(Tank->GetActorLocation());
-        }
+        RotateTurret(Tank->GetActorLocation());
     }
+}
+
+bool ATower::InRange()
+{
+    return Tank && FVector::Dist(Tank->GetActorLocation(), GetActorLocation()) <= FireRange;
 }
 
 void ATower::BeginPlay()
 {
 	Super::BeginPlay();
-    
+
     Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+
+    GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ATower::CheckFireCondition, FireRate, true);
+}
+
+void ATower::CheckFireCondition()
+{
+    if (InRange())
+    {
+        Fire();
+    }
 }

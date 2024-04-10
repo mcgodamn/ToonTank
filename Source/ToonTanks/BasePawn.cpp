@@ -4,6 +4,8 @@
 #include "BasePawn.h"
 #include <Components/CapsuleComponent.h>
 #include <Kismet/GameplayStatics.h>
+#include "Bullet.h"
+#include "HPComponent.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -21,6 +23,8 @@ ABasePawn::ABasePawn()
 
 	bulletSpwanPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet Spawn Point"));
 	bulletSpwanPoint->SetupAttachment(TurretMesh);
+	
+	HPComponent = CreateDefaultSubobject<UHPComponent>(TEXT("HP Component"));
 }
 
 // Called to bind functionality to input
@@ -36,4 +40,12 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 	TurretMesh->SetWorldRotation(
 		FMath::RInterpTo(
 			TurretMesh->GetComponentRotation(), Rotation, GetWorld()->DeltaTimeSeconds, 25.f));
+}
+
+void ABasePawn::Fire()
+{
+	auto bullet = GetWorld()->SpawnActor<ABullet>(
+		BulletObject, bulletSpwanPoint->GetComponentLocation(), bulletSpwanPoint->GetComponentRotation());
+	bullet->SetOwner(this);
+
 }

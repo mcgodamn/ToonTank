@@ -23,4 +23,10 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category = "Variable")
 	float FireRange = 5;
+	UPROPERTY(EditAnywhere, Category = "Variable")
+	float FireRate = 5;
+
+	bool InRange();
+	void CheckFireCondition();
+	FTimerHandle FireRateTimerHandle;
 };

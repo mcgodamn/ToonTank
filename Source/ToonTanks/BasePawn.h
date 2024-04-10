@@ -17,6 +17,7 @@ public:
 
 protected:
 	void RotateTurret(FVector LookAtTarget);
+	void Fire();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Comp", BlueprintReadWrite, meta = (AllowPrivateAccess = "true") )
@@ -27,6 +28,11 @@ private:
 	class UStaticMeshComponent* TurretMesh;
 	UPROPERTY(VisibleAnywhere, Category = "Comp", BlueprintReadWrite, meta = (AllowPrivateAccess = "true") )
 	class USceneComponent* bulletSpwanPoint;
+	UPROPERTY(VisibleAnywhere, Category = "Comp", BlueprintReadWrite, meta = (AllowPrivateAccess = "true") )
+	class UHPComponent* HPComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class ABullet> BulletObject;
 
 public:	
 
