@@ -2,6 +2,8 @@
 
 
 #include "HPComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "TankGameMode.h"
 
 // Sets default values for this component's properties
 UHPComponent::UHPComponent()
@@ -9,8 +11,6 @@ UHPComponent::UHPComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 
@@ -20,6 +20,8 @@ void UHPComponent::BeginPlay()
 	Super::BeginPlay();
 
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHPComponent::TakeDamage);
+
+	GameMode = Cast<ATankGameMode>(UGameplayStatics::GetGameMode(this));
 }
 
 // Called every frame
@@ -34,4 +36,9 @@ void UHPComponent::TakeDamage(AActor* DamagedActor, float Damage, const class UD
 {
 	HP -= Damage;
 	UE_LOG(LogTemp, Display, TEXT("Now HP is %f"), HP);
+
+	if (HP <= 0 && GameMode)
+	{
+		GameMode->ActorDied(DamagedActor);
+	}
 }

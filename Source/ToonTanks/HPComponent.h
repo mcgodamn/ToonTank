@@ -32,4 +32,6 @@ private:
 	float MaxHP = 100;
 	UPROPERTY(EditAnywhere, Category = "Variable")
 	float HP = 100;
+
+	class ATankGameMode* GameMode;
 };

@@ -23,6 +23,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	void HandleDestruction() override;
+
+	class APlayerController* GetPlayerController() const { return PlayerController; }
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,6 +41,8 @@ private:
 	float Speed = 1;
 	UPROPERTY(EditAnywhere, Category = "Variable")
 	float TurnRate = 1;
+	
+	class APlayerController* PlayerController;
 
 	void Move(float Value);
 	void Turn(float Value);

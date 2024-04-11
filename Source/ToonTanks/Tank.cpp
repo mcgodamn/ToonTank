@@ -10,8 +10,6 @@
 #include "DrawDebugHelpers.h"
 #include "Engine/EngineBaseTypes.h"
 
-APlayerController* PlayerController;
-
 // Sets default values
 ATank::ATank()
 {
@@ -73,4 +71,12 @@ void ATank::Turn(float Value)
 
 	DeltaRotation.Yaw = Value * TurnRate * deltaTime * (NowDeltaLocation == -1 ? -1 : 1);
 	AddActorLocalRotation(DeltaRotation, true);
+}
+
+void ATank::HandleDestruction()
+{
+	Super::HandleDestruction();
+
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
 }

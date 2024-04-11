@@ -49,3 +49,8 @@ void ABasePawn::Fire()
 	bullet->SetOwner(this);
 
 }
+
+void ABasePawn::HandleDestruction()
+{
+
+}
