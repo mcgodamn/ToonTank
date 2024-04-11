@@ -26,7 +26,7 @@ public:
 	
 	void HandleDestruction() override;
 
-	class APlayerController* GetPlayerController() const { return PlayerController; }
+	class AToonPlayerController* GetPlayerController() const { return PlayerController; }
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,7 +42,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Variable")
 	float TurnRate = 1;
 	
-	class APlayerController* PlayerController;
+	class AToonPlayerController* PlayerController;
 
 	void Move(float Value);
 	void Turn(float Value);

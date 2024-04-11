@@ -5,12 +5,14 @@
 #include "Kismet/GameplayStatics.h"
 #include "Tank.h"
 #include "BasePawn.h"
+#include "ToonPlayerController.h"
+#include "TimerManager.h"
 
 void ATankGameMode::BeginPlay()
 {
     Super::BeginPlay();
 
-    Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+    HandleGameStart();
 }
 
 void ATankGameMode::ActorDied(AActor* DeadActor)
@@ -20,8 +22,23 @@ void ATankGameMode::ActorDied(AActor* DeadActor)
         pawn->HandleDestruction();
     }
 
-    if (Tank == Cast<ATank>(DeadActor) && Tank->GetPlayerController())
+    if (Tank == Cast<ATank>(DeadActor) && ToonTanksPlayerController)
     {
-        Tank->DisableInput(Tank->GetPlayerController());
+        ToonTanksPlayerController->SetPlayerControllerEnableState(false);
     }
+}
+
+void ATankGameMode::HandleGameStart()
+{
+    Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+    ToonTanksPlayerController = Cast<AToonPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+    ToonTanksPlayerController->SetPlayerControllerEnableState(false);
+
+    FTimerHandle TimerHandle;
+    GetWorldTimerManager().SetTimer(
+        TimerHandle,
+        FTimerDelegate::CreateUObject(ToonTanksPlayerController, &AToonPlayerController::SetPlayerControllerEnableState, true),
+        StartDelay,
+        false
+    );
 }

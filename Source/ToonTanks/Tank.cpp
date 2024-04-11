@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/EngineBaseTypes.h"
+#include "ToonPlayerController.h"
 
 // Sets default values
 ATank::ATank()
@@ -59,7 +60,7 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	PlayerController = Cast<APlayerController>(GetController());
+	PlayerController = Cast<AToonPlayerController>(GetController());
 }
 
 void ATank::Turn(float Value)
