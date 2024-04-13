@@ -61,6 +61,8 @@ void ATank::BeginPlay()
 	Super::BeginPlay();
 	
 	PlayerController = Cast<AToonPlayerController>(GetController());
+	
+	Alive = true;
 }
 
 void ATank::Turn(float Value)
@@ -80,4 +82,6 @@ void ATank::HandleDestruction()
 
 	SetActorHiddenInGame(true);
 	SetActorTickEnabled(false);
+
+	Alive = false;
 }

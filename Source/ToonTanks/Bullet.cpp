@@ -5,6 +5,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/DamageType.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -16,6 +17,10 @@ ABullet::ABullet()
 	RootComponent = BaseMesh;
 	
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
+
+	TrailParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
+	TrailParticleSystem->SetupAttachment(RootComponent);
+	
 }
 
 // Called when the game starts or when spawned
@@ -24,6 +29,8 @@ void ABullet::BeginPlay()
 	Super::BeginPlay();
 	
 	BaseMesh->OnComponentHit.AddDynamic(this, &ABullet::OnHit);
+
+	UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation());
 }
 
 // Called every frame
@@ -35,9 +42,20 @@ void ABullet::Tick(float DeltaTime)
 
 void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (!GetOwner() || !OtherActor || OtherActor == this || OtherActor == GetOwner()) return;
-
+	if (!GetOwner() || !OtherActor || OtherActor == this || OtherActor == GetOwner())
+	{
+		Destroy();
+		return;
+	}
+	
 	auto controller = GetOwner()->GetInstigatorController();
 	UGameplayStatics::ApplyDamage(OtherActor, Damage, controller, this, UDamageType::StaticClass());
 	Destroy();
+
+	if (OnHitParticle)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, OnHitParticle, GetActorLocation(), GetActorRotation());
+	}
+	UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+	GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShake);
 }

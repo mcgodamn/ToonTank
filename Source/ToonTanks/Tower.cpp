@@ -33,7 +33,7 @@ void ATower::BeginPlay()
 
 void ATower::CheckFireCondition()
 {
-    if (InRange())
+    if (InRange() && Tank->IsAlive())
     {
         Fire();
     }

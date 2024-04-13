@@ -52,5 +52,10 @@ void ABasePawn::Fire()
 
 void ABasePawn::HandleDestruction()
 {
-
+	if (OnDieParticle)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, OnDieParticle, GetActorLocation(), GetActorRotation());
+	}
+	UGameplayStatics::PlaySoundAtLocation(this, DeadSound, GetActorLocation());
+	GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeadCameraShake);
 }

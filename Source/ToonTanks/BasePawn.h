@@ -36,6 +36,13 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class ABullet> BulletObject;
 
+	UPROPERTY(EditAnywhere, Category = "Variable")
+	class UParticleSystem* OnDieParticle;
+	UPROPERTY(EditAnywhere, Category = "Variable")
+	class USoundBase* DeadSound;
+	UPROPERTY(EditAnywhere, Category = "Variable")
+	TSubclassOf<class UCameraShakeBase> DeadCameraShake;
+
 public:	
 
 	// Called to bind functionality to input

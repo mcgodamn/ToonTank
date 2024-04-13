@@ -28,6 +28,8 @@ public:
 
 	class AToonPlayerController* GetPlayerController() const { return PlayerController; }
 
+	bool IsAlive() {return Alive;}
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,4 +48,6 @@ private:
 
 	void Move(float Value);
 	void Turn(float Value);
+
+	bool Alive;
 };
